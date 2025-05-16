@@ -1,4 +1,5 @@
 import BraintreePaypal from './NativeBraintreePaypal';
+import type { PayPalResponse } from './types';
 
 export async function showPayPal(
   serverUrl: string,
@@ -6,7 +7,7 @@ export async function showPayPal(
   shippingRequired: boolean,
   currency: string,
   email?: string
-): Promise<boolean> {
+): Promise<PayPalResponse> {
   return await BraintreePaypal.showPayPal(
     serverUrl,
     amount,
@@ -15,3 +16,4 @@ export async function showPayPal(
     email
   );
 }
+export * from './types';

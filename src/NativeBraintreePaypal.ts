@@ -1,5 +1,6 @@
 import type { TurboModule } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
+import type { PayPalResponse } from './types';
 
 export interface Spec extends TurboModule {
   showPayPal(
@@ -8,7 +9,7 @@ export interface Spec extends TurboModule {
     shippingRequired: boolean,
     currency: string,
     email?: string
-  ): Promise<boolean>;
+  ): Promise<PayPalResponse>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('BraintreePaypal');
