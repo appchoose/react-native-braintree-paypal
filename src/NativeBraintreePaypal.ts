@@ -8,7 +8,9 @@ export interface Spec extends TurboModule {
     amount: string,
     shippingRequired: boolean,
     currency: string,
-    email?: string
+    email?: string,
+    androidAppLinkReturnUrl?: string,
+    androidDeepLinkFallbackUrlScheme?: string
   ): Promise<PayPalResponse>;
 }
 

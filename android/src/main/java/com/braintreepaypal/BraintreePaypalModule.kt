@@ -3,7 +3,6 @@ package com.braintreepaypal
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.fragment.app.FragmentActivity
 import com.braintreepayments.api.paypal.PayPalAccountNonce
 import com.braintreepayments.api.paypal.PayPalCheckoutRequest
@@ -25,10 +24,13 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
 import java.util.concurrent.TimeUnit
+import androidx.core.net.toUri
 
 @ReactModule(name = BraintreePaypalModule.NAME)
 class BraintreePaypalModule(reactContext: ReactApplicationContext) :
   NativeBraintreePaypalSpec(reactContext), ActivityEventListener, LifecycleEventListener {
+
+  private lateinit var payPalLauncher: PayPalLauncher
 
   private lateinit var currentActivityRef: FragmentActivity
   private lateinit var payPalClientRef: PayPalClient
@@ -36,15 +38,6 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
 
   private var isShippingRequired = false
   private var reactContextRef: Context = reactContext
-
-  companion object {
-    lateinit var payPalLauncher: PayPalLauncher
-    const val NAME = "BraintreePaypal"
-
-    fun init() {
-      payPalLauncher = PayPalLauncher()
-    }
-  }
 
   init {
     reactContext.addLifecycleEventListener(this)
@@ -61,11 +54,14 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
     shippingRequired: Boolean,
     currency: String,
     email: String?,
+    appLinkReturnUrl: String,
+    deepLinkFallbackUrlScheme: String?,
     promise: Promise
   ) {
     promiseRef = promise
     isShippingRequired = shippingRequired
     currentActivityRef = getCurrentActivity() as FragmentActivity
+    payPalLauncher = PayPalLauncher()
 
     val client = OkHttpClient.Builder()
       .connectTimeout(30, TimeUnit.SECONDS)
@@ -89,11 +85,12 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
         }
 
         // Switch to main thread for UI operations
-        (reactContextRef as? Activity)?.runOnUiThread {
+        currentActivityRef.runOnUiThread {
           payPalClientRef = PayPalClient(
             reactContextRef,
             token,
-            Uri.parse("https://merchant-app.com")
+            appLinkReturnUrl.toUri(),
+            deepLinkFallbackUrlScheme
           )
           val checkoutRequest = PayPalCheckoutRequest(
             amount = amount,
@@ -114,12 +111,12 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
                     PendingRequestStore.getInstance().putPayPalPendingRequest(reactContextRef, pendingRequest)
                   }
                   is PayPalPendingRequest.Failure -> {
-                    promiseRef.reject(Throwable("PayPalPendingRequest.Failure"))
+                    promiseRef.reject(pendingRequest.error)
                   }
                 }
               }
               is PayPalPaymentAuthRequest.Failure -> {
-                promiseRef.reject(Throwable("PayPalPaymentAuthRequest.Failure"))
+                promiseRef.reject(paymentAuthRequest.error)
               }
             }
           }
@@ -143,7 +140,7 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
         }
 
         is PayPalPaymentAuthResult.Success ->
-          completePayPalFlow(paymentAuthResult);
+          completePayPalFlow(paymentAuthResult)
       }
       clearPayPalPendingRequest()
     }
@@ -224,5 +221,9 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
 
   override fun onNewIntent(intent: Intent) {
     handleReturnToApp(intent)
+  }
+
+  companion object {
+    const val NAME = "BraintreePaypal"
   }
 }
