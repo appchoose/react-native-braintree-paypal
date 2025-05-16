@@ -54,7 +54,7 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
     shippingRequired: Boolean,
     currency: String,
     email: String?,
-    appLinkReturnUrl: String,
+    appLinkReturnUrl: String?,
     deepLinkFallbackUrlScheme: String?,
     promise: Promise
   ) {
@@ -89,7 +89,7 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
           payPalClientRef = PayPalClient(
             reactContextRef,
             token,
-            appLinkReturnUrl.toUri(),
+            (appLinkReturnUrl ?: "").toUri(),
             deepLinkFallbackUrlScheme
           )
           val checkoutRequest = PayPalCheckoutRequest(
