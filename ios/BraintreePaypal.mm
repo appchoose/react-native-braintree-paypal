@@ -1,18 +1,14 @@
-#import "BraintreePaypal.h"
+#import <React/RCTBridgeModule.h>
 
-@implementation BraintreePaypal
-RCT_EXPORT_MODULE()
+@interface RCT_EXTERN_MODULE (BraintreePaypal, NSObject)
 
-- (NSNumber *)multiply:(double)a b:(double)b {
-    NSNumber *result = @(a * b);
-
-    return result;
-}
-
-- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
-    (const facebook::react::ObjCTurboModule::InitParams &)params
-{
-    return std::make_shared<facebook::react::NativeBraintreePaypalSpecJSI>(params);
-}
+RCT_EXTERN_METHOD(showPayPal
+                  : (NSString *)serverUrl amount
+                  : (NSString *)amount shippingRequired
+                  : (BOOL)shippingRequired currency
+                  : (NSString *)currency email
+                  : (NSString *)email resolve
+                  : (RCTPromiseResolveBlock)resolve reject
+                  : (RCTPromiseRejectBlock)reject)
 
 @end
