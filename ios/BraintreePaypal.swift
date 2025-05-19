@@ -11,11 +11,11 @@ class BraintreePaypal: NSObject {
   }
 
   private func checkout(
-    client: BTAPIClient, amount: String, shippingRequired: Bool, currency: String, email: String?,
+    client: BTAPIClient, amount: String, shippingRequired: Bool, currency: String, appLink: String, email: String?,
     resolve: @escaping RCTPromiseResolveBlock,
     reject: @escaping RCTPromiseRejectBlock
   ) {
-    var paypalClient = BTPayPalClient(apiClient: client)
+    var paypalClient = BTPayPalClient(apiClient: client, universalLink: URL(string: appLink)!)
     var checkoutRequest = BTPayPalCheckoutRequest(
       amount: amount, intent: .authorize, userAction: .none, offerPayLater: false,
       currencyCode: currency, requestBillingAgreement: false, shippingCallbackURL: nil,
@@ -33,23 +33,23 @@ class BraintreePaypal: NSObject {
         return
       }
 
-      var result: [String: Any] = [
-        "email": accountNonce.email ?? "",
-        "firstName": accountNonce.firstName ?? "",
-        "lastName": accountNonce.lastName ?? "",
-        "phone": accountNonce.phone ?? "",
+      var result: [String: Any?] = [
+        "email": accountNonce.email,
+        "firstName": accountNonce.firstName,
+        "lastName": accountNonce.lastName,
+        "phone": accountNonce.phone,
         "nonce": accountNonce.nonce,
       ]
 
       if let shippingAddress = accountNonce.shippingAddress, shippingRequired {
         result["shippingAddress"] = [
-          "streetAddress": shippingAddress.streetAddress ?? "",
-          "recipientName": shippingAddress.recipientName ?? "",
-          "postalCode": shippingAddress.postalCode ?? "",
-          "countryCodeAlpha2": shippingAddress.countryCodeAlpha2 ?? "",
-          "extendedAddress": shippingAddress.extendedAddress ?? "",
-          "region": shippingAddress.region ?? "",
-          "locality": shippingAddress.locality ?? "",
+          "streetAddress": shippingAddress.streetAddress,
+          "recipientName": shippingAddress.recipientName,
+          "postalCode": shippingAddress.postalCode,
+          "countryCodeAlpha2": shippingAddress.countryCodeAlpha2,
+          "extendedAddress": shippingAddress.extendedAddress,
+          "region": shippingAddress.region,
+          "locality": shippingAddress.locality,
         ]
       }
 
@@ -59,7 +59,7 @@ class BraintreePaypal: NSObject {
 
   @objc
   func showPayPal(
-    _ serverUrl: String, amount: String, shippingRequired: Bool, currency: String, email: String?,
+    _ serverUrl: String, amount: String, shippingRequired: Bool, currency: String, appLink: String, email: String?,
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
     guard let clientTokenURL = URL(string: serverUrl) else {
@@ -87,7 +87,7 @@ class BraintreePaypal: NSObject {
       }
       checkout(
         client: client, amount: amount, shippingRequired: shippingRequired, currency: currency,
-        email: email, resolve: resolve, reject: reject)
+        appLink: appLink, email: email, resolve: resolve, reject: reject)
     }
     task.resume()
   }
