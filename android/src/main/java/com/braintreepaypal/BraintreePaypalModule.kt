@@ -158,7 +158,7 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
         }
 
         is PayPalResult.Cancel -> { /* handle user canceled */
-          promiseRef.reject(Throwable("USER_CANCELED"))
+          promiseRef.reject("USER_CANCELED", "User canceled the PayPal payment")
         }
       }
     }

@@ -11,12 +11,13 @@ class BraintreePaypal: NSObject {
   }
 
   private func checkout(
-    client: BTAPIClient, amount: String, shippingRequired: Bool, currency: String, appLink: String, email: String?,
+    client: BTAPIClient, amount: String, shippingRequired: Bool, currency: String, appLink: String,
+    email: String?,
     resolve: @escaping RCTPromiseResolveBlock,
     reject: @escaping RCTPromiseRejectBlock
   ) {
-    var paypalClient = BTPayPalClient(apiClient: client, universalLink: URL(string: appLink)!)
-    var checkoutRequest = BTPayPalCheckoutRequest(
+    let paypalClient = BTPayPalClient(apiClient: client, universalLink: URL(string: appLink)!)
+    let checkoutRequest = BTPayPalCheckoutRequest(
       amount: amount, intent: .authorize, userAction: .none, offerPayLater: false,
       currencyCode: currency, requestBillingAgreement: false, shippingCallbackURL: nil,
       userAuthenticationEmail: email)
@@ -25,6 +26,16 @@ class BraintreePaypal: NSObject {
 
     paypalClient.tokenize(checkoutRequest) { accountNonce, error in
       if let error = error {
+        if let paypalError = error as? BTPayPalError {
+          switch paypalError {
+          case .canceled:
+            reject("USER_CANCELED", "User canceled PayPal flow", nil)
+            return
+          default:
+            reject("paypal_error", "PayPal tokenization failed", error)
+            return
+          }
+        }
         reject("paypal_error", "PayPal tokenization failed", error)
         return
       }
@@ -59,7 +70,8 @@ class BraintreePaypal: NSObject {
 
   @objc
   func showPayPal(
-    _ serverUrl: String, amount: String, shippingRequired: Bool, currency: String, appLink: String, email: String?,
+    _ serverUrl: String, amount: String, shippingRequired: Bool, currency: String, appLink: String,
+    email: String?,
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
     guard let clientTokenURL = URL(string: serverUrl) else {
