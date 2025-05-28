@@ -35,7 +35,13 @@
     "prepare": "bob build",
     "release": "semantic-release"
   },
-  "keywords": ["react-native", "ios", "android", "braintree", "paypal"],
+  "keywords": [
+    "react-native",
+    "ios",
+    "android",
+    "braintree",
+    "paypal"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/appchoose/react-native-braintree-paypal.git"
@@ -72,7 +78,9 @@
   },
   "packageManager": "yarn@4.9.1",
   "commitlint": {
-    "extends": ["@commitlint/config-conventional"]
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "react-native-builder-bob": {
     "source": "src",
