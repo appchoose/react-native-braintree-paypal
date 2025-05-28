@@ -1,6 +1,6 @@
-import { Platform } from 'react-native';
-import BraintreePaypal from './NativeBraintreePaypal';
-import type { BraintreePayPalResponse } from './types';
+import { Platform } from "react-native";
+import BraintreePaypal from "./NativeBraintreePaypal";
+import type { BraintreePayPalResponse } from "./types";
 
 export async function showPayPal(
   serverUrl: string,
@@ -11,11 +11,11 @@ export async function showPayPal(
   email?: string,
   android?: {
     deepLinkFallbackUrlScheme?: string;
-  }
+  },
 ): Promise<BraintreePayPalResponse> {
-  if (Platform.OS === 'android') {
+  if (Platform.OS === "android") {
     if (!android) {
-      throw new Error('android is required');
+      throw new Error("android is required");
     }
     return await BraintreePaypal.showPayPal(
       serverUrl,
@@ -24,7 +24,7 @@ export async function showPayPal(
       currency,
       appLink,
       email,
-      android.deepLinkFallbackUrlScheme
+      android.deepLinkFallbackUrlScheme,
     );
   }
   return await BraintreePaypal.showPayPal(
@@ -33,7 +33,7 @@ export async function showPayPal(
     shippingRequired,
     currency,
     appLink,
-    email
+    email,
   );
 }
-export * from './types';
+export * from "./types";

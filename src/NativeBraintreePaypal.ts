@@ -1,6 +1,6 @@
-import type { TurboModule } from 'react-native';
-import { TurboModuleRegistry } from 'react-native';
-import type { BraintreePayPalResponse } from './types';
+import type { TurboModule } from "react-native";
+import { TurboModuleRegistry } from "react-native";
+import type { BraintreePayPalResponse } from "./types";
 
 export interface Spec extends TurboModule {
   showPayPal(
@@ -10,8 +10,8 @@ export interface Spec extends TurboModule {
     currency: string,
     appLink: string,
     email?: string,
-    androidDeepLinkFallbackUrlScheme?: string
+    androidDeepLinkFallbackUrlScheme?: string,
   ): Promise<BraintreePayPalResponse>;
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>('BraintreePaypal');
+export default TurboModuleRegistry.getEnforcing<Spec>("BraintreePaypal");
