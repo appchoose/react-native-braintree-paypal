@@ -15,6 +15,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@appchoose/react-native-braintree-paypal@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@appchoose/react-native-braintree-paypal@workspace:."
+  dependencies:
+    "@biomejs/biome": "npm:1.9.4"
+    "@commitlint/cli": "npm:19.8.1"
+    "@commitlint/config-conventional": "npm:19.8.1"
+    "@react-native-community/cli": "npm:15.1.3"
+    "@react-native/babel-preset": "npm:0.79.2"
+    "@semantic-release/changelog": "npm:6.0.3"
+    "@semantic-release/git": "npm:10.0.1"
+    "@types/react": "npm:19.0.0"
+    del-cli: "npm:6.0.0"
+    react: "npm:19.0.0"
+    react-native: "npm:0.79.2"
+    react-native-builder-bob: "npm:0.40.11"
+    semantic-release: "npm:24.2.5"
+    turbo: "npm:2.5.3"
+    typescript: "npm:5.8.3"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  languageName: unknown
+  linkType: soft
+
 "@ark/schema@npm:0.46.0":
   version: 0.46.0
   resolution: "@ark/schema@npm:0.46.0"
@@ -8582,31 +8607,6 @@ __metadata:
   checksum: 10/d5f60c87d285af24b1e1e7eaeb123ec256c3c8bdea7061ab3932e3e14685708221bf234ec50b21e10dd07f008f1b966a2730a0ce4ff67905b3872ff2042aec22
   languageName: node
   linkType: hard
-
-"react-native-braintree-paypal@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "react-native-braintree-paypal@workspace:."
-  dependencies:
-    "@biomejs/biome": "npm:1.9.4"
-    "@commitlint/cli": "npm:19.8.1"
-    "@commitlint/config-conventional": "npm:19.8.1"
-    "@react-native-community/cli": "npm:15.1.3"
-    "@react-native/babel-preset": "npm:0.79.2"
-    "@semantic-release/changelog": "npm:6.0.3"
-    "@semantic-release/git": "npm:10.0.1"
-    "@types/react": "npm:19.0.0"
-    del-cli: "npm:6.0.0"
-    react: "npm:19.0.0"
-    react-native: "npm:0.79.2"
-    react-native-builder-bob: "npm:0.40.11"
-    semantic-release: "npm:24.2.5"
-    turbo: "npm:2.5.3"
-    typescript: "npm:5.8.3"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  languageName: unknown
-  linkType: soft
 
 "react-native-builder-bob@npm:0.40.11":
   version: 0.40.11
