@@ -1,6 +1,6 @@
 {
-  "name": "react-native-braintree-paypal",
-  "version": "0.3.5",
+  "name": "@appchoose/react-native-braintree-paypal",
+  "version": "0.3.6",
   "description": "RN Braintree for PayPal payment",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
@@ -38,16 +38,16 @@
   "keywords": ["react-native", "ios", "android", "braintree", "paypal"],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/huextrat/react-native-braintree-paypal.git"
+    "url": "git+https://github.com/appchoose/react-native-braintree-paypal.git"
   },
   "author": "Hugo EXTRAT <extrat.h@gmail.com> (https://github.com/huextrat)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/huextrat/react-native-braintree-paypal/issues"
+    "url": "https://github.com/appchoose/react-native-braintree-paypal/issues"
   },
-  "homepage": "https://github.com/huextrat/react-native-braintree-paypal#readme",
+  "homepage": "https://github.com/appchoose/react-native-braintree-paypal#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://npm.pkg.github.com"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
