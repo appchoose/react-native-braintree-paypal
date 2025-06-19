@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.7](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.3.6...v0.3.7) (2025-06-19)
+
+
+### Bug Fixes
+
+* payPalLauncher not initialized ([2fe2c86](https://github.com/appchoose/react-native-braintree-paypal/commit/2fe2c8640fdb03c3091e87e3811b6f741e9c3b46))
+
 ## [0.3.6](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.3.5...v0.3.6) (2025-05-28)
 
 
