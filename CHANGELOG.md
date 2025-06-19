@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.8](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.3.7...v0.3.8) (2025-06-19)
+
+
+### Bug Fixes
+
+* bump native braintree ([d3ded47](https://github.com/appchoose/react-native-braintree-paypal/commit/d3ded4761e08c89d8327df8f597ce30be6056dd3))
+
 ## [0.3.7](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.3.6...v0.3.7) (2025-06-19)
 
 
