@@ -75,7 +75,7 @@ dependencies {
   implementation "com.facebook.react:react-android"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-  implementation 'com.braintreepayments.api:paypal:5.10.0'
+  implementation 'com.braintreepayments.api:paypal:5.12.0'
 }
 
 react {
