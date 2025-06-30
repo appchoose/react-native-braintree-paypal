@@ -30,7 +30,7 @@ import androidx.core.net.toUri
 class BraintreePaypalModule(reactContext: ReactApplicationContext) :
   NativeBraintreePaypalSpec(reactContext), ActivityEventListener, LifecycleEventListener {
 
-  private var payPalLauncher: PayPalLauncher? = null
+  private lateinit var payPalLauncher: PayPalLauncher
 
   private lateinit var currentActivityRef: FragmentActivity
   private lateinit var payPalClientRef: PayPalClient
@@ -106,7 +106,7 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
           payPalClientRef.createPaymentAuthRequest(reactContextRef, checkoutRequest) { paymentAuthRequest ->
             when (paymentAuthRequest) {
               is PayPalPaymentAuthRequest.ReadyToLaunch -> {
-                when (val pendingRequest = payPalLauncher!!.launch(currentActivityRef, paymentAuthRequest)) {
+                when (val pendingRequest = payPalLauncher.launch(currentActivityRef, paymentAuthRequest)) {
                   is PayPalPendingRequest.Started -> {
                     PendingRequestStore.getInstance().putPayPalPendingRequest(reactContextRef, pendingRequest)
                   }
@@ -128,8 +128,8 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
   private fun handleReturnToApp(intent: Intent) {
     val payPalPendingRequest: PayPalPendingRequest.Started? = getPayPalPendingRequest()
 
-    if (payPalPendingRequest != null && payPalLauncher != null) {
-      val paymentAuthResult = payPalLauncher!!.handleReturnToApp(payPalPendingRequest, intent)
+    if (payPalPendingRequest != null && this::payPalLauncher.isInitialized) {
+      val paymentAuthResult = payPalLauncher.handleReturnToApp(payPalPendingRequest, intent)
 
       when (paymentAuthResult) {
         is PayPalPaymentAuthResult.Failure ->
