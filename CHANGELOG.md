@@ -1,5 +1,12 @@
 # Changelog
 
+# [0.4.0](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.3.9...v0.4.0) (2025-08-21)
+
+
+### Features
+
+* bump native braintree deps ([aaaf65b](https://github.com/appchoose/react-native-braintree-paypal/commit/aaaf65b3cf3989c5a7cce081f8df9a03e0bfa2b7))
+
 ## [0.3.9](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.3.8...v0.3.9) (2025-06-30)
 
 
