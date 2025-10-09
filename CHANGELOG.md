@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.4.0...v0.4.1) (2025-10-09)
+
+
+### Bug Fixes
+
+* use Uri.parse ([8ac1f7d](https://github.com/appchoose/react-native-braintree-paypal/commit/8ac1f7d440079b924472b1d968032dfa2370ed53))
+
 # [0.4.0](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.3.9...v0.4.0) (2025-08-21)
 
 
