@@ -25,6 +25,7 @@ import okhttp3.Request
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import android.net.Uri
+import android.util.Log
 
 @ReactModule(name = BraintreePaypalModule.NAME)
 class BraintreePaypalModule(reactContext: ReactApplicationContext) :
@@ -78,20 +79,59 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
       }
 
       override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-        val token = response.body?.string() ?: ""
-        if (token.isEmpty()) {
-          promiseRef.reject(Throwable("Token is empty"))
+        Log.d("BraintreePaypal", "Server response code: ${response.code}")
+        Log.d("BraintreePaypal", "Server response headers: ${response.headers}")
+        
+        val responseBody = response.body?.string() ?: ""
+        Log.d("BraintreePaypal", "Server response body: $responseBody")
+        
+        if (responseBody.isEmpty()) {
+          promiseRef.reject("EUNSPECIFIED", "Empty response from server")
           return
         }
+        
+        // Try to extract token from response
+        val token = try {
+          // First try to parse as JSON and extract token
+          val jsonResponse = org.json.JSONObject(responseBody)
+          if (jsonResponse.has("token")) {
+            jsonResponse.getString("token")
+          } else if (jsonResponse.has("clientToken")) {
+            jsonResponse.getString("clientToken")
+          } else if (jsonResponse.has("authorization")) {
+            jsonResponse.getString("authorization")
+          } else {
+            // If no token field found, assume the entire response is the token
+            responseBody.trim()
+          }
+        } catch (e: org.json.JSONException) {
+          Log.w("BraintreePaypal", "Failed to parse JSON response, treating as plain token: ${e.message}")
+          // If JSON parsing fails, assume the entire response is the token
+          responseBody.trim()
+        }
+        
+        if (token.isEmpty()) {
+          promiseRef.reject("EUNSPECIFIED", "No valid token found in server response")
+          return
+        }
+        
+        Log.d("BraintreePaypal", "Extracted token: ${token.take(20)}...")
 
         // Switch to main thread for UI operations
         currentActivityRef.runOnUiThread {
-          payPalClientRef = PayPalClient(
-            context = reactContextRef,
-            authorization = token,
-            appLinkReturnUrl = Uri.parse(appLink),
-            deepLinkFallbackUrlScheme
-          )
+          try {
+            payPalClientRef = PayPalClient(
+              context = reactContextRef,
+              authorization = token,
+              appLinkReturnUrl = Uri.parse(appLink),
+              deepLinkFallbackUrlScheme
+            )
+            Log.d("BraintreePaypal", "PayPal client created successfully")
+          } catch (e: Exception) {
+            Log.e("BraintreePaypal", "Failed to create PayPal client: ${e.message}", e)
+            promiseRef.reject("EUNSPECIFIED", "Failed to create PayPal client: ${e.message}")
+            return@runOnUiThread
+          }
           val checkoutRequest = PayPalCheckoutRequest(
             amount = amount,
             hasUserLocationConsent = false,
