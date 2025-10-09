@@ -79,11 +79,11 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
       }
 
       override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-        Log.d("BraintreePaypal", "Server response code: ${response.code}")
-        Log.d("BraintreePaypal", "Server response headers: ${response.headers}")
+        Log.i("BraintreePaypal", "Server response code: ${response.code}")
+        Log.i("BraintreePaypal", "Server response headers: ${response.headers}")
         
         val responseBody = response.body?.string() ?: ""
-        Log.d("BraintreePaypal", "Server response body: $responseBody")
+        Log.i("BraintreePaypal", "Server response body: $responseBody")
         
         if (responseBody.isEmpty()) {
           promiseRef.reject("EUNSPECIFIED", "Empty response from server")
@@ -115,7 +115,7 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
           return
         }
         
-        Log.d("BraintreePaypal", "Extracted token: ${token.take(20)}...")
+        Log.i("BraintreePaypal", "Extracted token: ${token.take(20)}...")
 
         // Switch to main thread for UI operations
         currentActivityRef.runOnUiThread {
@@ -126,7 +126,7 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
               appLinkReturnUrl = Uri.parse(appLink),
               deepLinkFallbackUrlScheme
             )
-            Log.d("BraintreePaypal", "PayPal client created successfully")
+            Log.i("BraintreePaypal", "PayPal client created successfully")
           } catch (e: Exception) {
             Log.e("BraintreePaypal", "Failed to create PayPal client: ${e.message}", e)
             promiseRef.reject("EUNSPECIFIED", "Failed to create PayPal client: ${e.message}")
