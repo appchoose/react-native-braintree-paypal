@@ -24,7 +24,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
 import java.util.concurrent.TimeUnit
-import androidx.core.net.toUri
+import android.net.Uri
 
 @ReactModule(name = BraintreePaypalModule.NAME)
 class BraintreePaypalModule(reactContext: ReactApplicationContext) :
@@ -87,9 +87,9 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
         // Switch to main thread for UI operations
         currentActivityRef.runOnUiThread {
           payPalClientRef = PayPalClient(
-            reactContextRef,
-            token,
-            appLink.toUri(),
+            context = reactContextRef,
+            authorization = token,
+            appLinkReturnUrl = Uri.parse(appLink),
             deepLinkFallbackUrlScheme
           )
           val checkoutRequest = PayPalCheckoutRequest(
