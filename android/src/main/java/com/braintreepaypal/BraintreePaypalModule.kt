@@ -82,36 +82,18 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
         Log.i("BraintreePaypal", "Server response code: ${response.code}")
         Log.i("BraintreePaypal", "Server response headers: ${response.headers}")
         
-        val responseBody = response.body?.string() ?: ""
-        Log.i("BraintreePaypal", "Server response body: $responseBody")
-        
-        if (responseBody.isEmpty()) {
-          promiseRef.reject("EUNSPECIFIED", "Empty response from server")
+        val token = try {
+          response.body?.string() ?: ""
+        } catch (e: IOException) {
+          Log.e("BraintreePaypal", "Failed to read response body: ${e.message}")
+          promiseRef.reject("EUNSPECIFIED", "Failed to read server response: ${e.message}")
           return
         }
         
-        // Try to extract token from response
-        val token = try {
-          // First try to parse as JSON and extract token
-          val jsonResponse = org.json.JSONObject(responseBody)
-          if (jsonResponse.has("token")) {
-            jsonResponse.getString("token")
-          } else if (jsonResponse.has("clientToken")) {
-            jsonResponse.getString("clientToken")
-          } else if (jsonResponse.has("authorization")) {
-            jsonResponse.getString("authorization")
-          } else {
-            // If no token field found, assume the entire response is the token
-            responseBody.trim()
-          }
-        } catch (e: org.json.JSONException) {
-          Log.w("BraintreePaypal", "Failed to parse JSON response, treating as plain token: ${e.message}")
-          // If JSON parsing fails, assume the entire response is the token
-          responseBody.trim()
-        }
+        Log.i("BraintreePaypal", "Server response body: $token")
         
         if (token.isEmpty()) {
-          promiseRef.reject("EUNSPECIFIED", "No valid token found in server response")
+          promiseRef.reject("EUNSPECIFIED", "Empty response from server")
           return
         }
         
@@ -120,10 +102,18 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
         // Switch to main thread for UI operations
         currentActivityRef.runOnUiThread {
           try {
+            val appLinkUri = try {
+              Uri.parse(appLink)
+            } catch (e: Exception) {
+              Log.e("BraintreePaypal", "Invalid appLink URL: $appLink", e)
+              promiseRef.reject("EUNSPECIFIED", "Invalid appLink URL: $appLink")
+              return@runOnUiThread
+            }
+            
             payPalClientRef = PayPalClient(
               context = reactContextRef,
               authorization = token,
-              appLinkReturnUrl = Uri.parse(appLink),
+              appLinkReturnUrl = appLinkUri,
               deepLinkFallbackUrlScheme
             )
             Log.i("BraintreePaypal", "PayPal client created successfully")
@@ -132,30 +122,49 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
             promiseRef.reject("EUNSPECIFIED", "Failed to create PayPal client: ${e.message}")
             return@runOnUiThread
           }
-          val checkoutRequest = PayPalCheckoutRequest(
-            amount = amount,
-            hasUserLocationConsent = false,
-            intent = PayPalPaymentIntent.AUTHORIZE,
-            userAction = PayPalPaymentUserAction.USER_ACTION_DEFAULT,
-            currencyCode = currency,
-            isShippingAddressRequired = shippingRequired,
-            isShippingAddressEditable = shippingRequired,
-            userAuthenticationEmail = email,
-            shouldOfferPayLater = false
-          )
+          val checkoutRequest = try {
+            PayPalCheckoutRequest(
+              amount = amount,
+              hasUserLocationConsent = false,
+              intent = PayPalPaymentIntent.AUTHORIZE,
+              userAction = PayPalPaymentUserAction.USER_ACTION_DEFAULT,
+              currencyCode = currency,
+              isShippingAddressRequired = shippingRequired,
+              isShippingAddressEditable = shippingRequired,
+              userAuthenticationEmail = email,
+              shouldOfferPayLater = false
+            )
+          } catch (e: Exception) {
+            Log.e("BraintreePaypal", "Failed to create PayPalCheckoutRequest: ${e.message}", e)
+            promiseRef.reject("EUNSPECIFIED", "Failed to create PayPal checkout request: ${e.message}")
+            return@runOnUiThread
+          }
+          
+          Log.i("BraintreePaypal", "PayPalCheckoutRequest created:")
+          Log.i("BraintreePaypal", "  Amount: $amount")
+          Log.i("BraintreePaypal", "  Currency: $currency")
+          Log.i("BraintreePaypal", "  Shipping Required: $shippingRequired")
+          Log.i("BraintreePaypal", "  Email: $email")
+          Log.i("BraintreePaypal", "  Intent: ${PayPalPaymentIntent.AUTHORIZE}")
+          Log.i("BraintreePaypal", "  User Action: ${PayPalPaymentUserAction.USER_ACTION_DEFAULT}")
+          Log.i("BraintreePaypal", "Creating payment auth request...")
           payPalClientRef.createPaymentAuthRequest(reactContextRef, checkoutRequest) { paymentAuthRequest ->
             when (paymentAuthRequest) {
               is PayPalPaymentAuthRequest.ReadyToLaunch -> {
+                Log.i("BraintreePaypal", "Payment auth request ready to launch")
                 when (val pendingRequest = payPalLauncher.launch(currentActivityRef, paymentAuthRequest)) {
                   is PayPalPendingRequest.Started -> {
+                    Log.i("BraintreePaypal", "PayPal pending request started successfully")
                     PendingRequestStore.getInstance().putPayPalPendingRequest(reactContextRef, pendingRequest)
                   }
                   is PayPalPendingRequest.Failure -> {
+                    Log.e("BraintreePaypal", "PayPal pending request failed: ${pendingRequest.error}")
                     promiseRef.reject(pendingRequest.error)
                   }
                 }
               }
               is PayPalPaymentAuthRequest.Failure -> {
+                Log.e("BraintreePaypal", "Payment auth request failed: ${paymentAuthRequest.error}")
                 promiseRef.reject(paymentAuthRequest.error)
               }
             }
@@ -262,6 +271,7 @@ class BraintreePaypalModule(reactContext: ReactApplicationContext) :
   override fun onNewIntent(intent: Intent) {
     handleReturnToApp(intent)
   }
+
 
   companion object {
     const val NAME = "BraintreePaypal"
