@@ -1,6 +1,6 @@
 {
   "name": "@appchoose/react-native-braintree-paypal",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "RN Braintree for PayPal payment",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
