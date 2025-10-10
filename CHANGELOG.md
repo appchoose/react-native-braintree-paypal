@@ -1,5 +1,12 @@
 # Changelog
 
+# [0.5.0](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.4.1...v0.5.0) (2025-10-10)
+
+
+### Features
+
+* revert logs ([efffdf8](https://github.com/appchoose/react-native-braintree-paypal/commit/efffdf8de726483bc9ffd8c22686c98650185363))
+
 ## [0.4.1](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.4.0...v0.4.1) (2025-10-09)
 
 
