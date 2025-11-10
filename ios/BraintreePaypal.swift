@@ -19,8 +19,9 @@ class BraintreePaypal: NSObject {
     let paypalClient = BTPayPalClient(authorization: clientToken, universalLink: URL(string: appLink)!)
     let checkoutRequest = BTPayPalCheckoutRequest(
       amount: amount, intent: .authorize, userAction: .none, offerPayLater: false,
-      currencyCode: currency, requestBillingAgreement: false, shippingCallbackURL: nil,
-      userAuthenticationEmail: email, isShippingAddressRequired: shippingRequired, isShippingAddressEditable: shippingRequired)
+      currencyCode: currency,isShippingAddressEditable: shippingRequired, isShippingAddressRequired: shippingRequired,
+      requestBillingAgreement: false, shippingCallbackURL: nil,
+      userAuthenticationEmail: email)
 
     paypalClient.tokenize(checkoutRequest) { accountNonce, error in
       if let error = error {
@@ -51,14 +52,15 @@ class BraintreePaypal: NSObject {
       ]
 
       if let shippingAddress = accountNonce.shippingAddress, shippingRequired {
+        let addressComponents = shippingAddress.addressComponents()
         result["shippingAddress"] = [
-          "streetAddress": shippingAddress.streetAddress,
-          "recipientName": shippingAddress.recipientName,
-          "postalCode": shippingAddress.postalCode,
-          "countryCodeAlpha2": shippingAddress.countryCodeAlpha2,
-          "extendedAddress": shippingAddress.extendedAddress,
-          "region": shippingAddress.region,
-          "locality": shippingAddress.locality,
+          "streetAddress": addressComponents["streetAddress"],
+          "recipientName": addressComponents["recipientName"],
+          "postalCode": addressComponents["postalCode"],
+          "countryCodeAlpha2": addressComponents["countryCodeAlpha2"],
+          "extendedAddress": addressComponents["extendedAddress"],
+          "region": addressComponents["region"],
+          "locality": addressComponents["locality"],
         ]
       }
 
