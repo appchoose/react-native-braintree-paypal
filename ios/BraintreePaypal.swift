@@ -11,18 +11,16 @@ class BraintreePaypal: NSObject {
   }
 
   private func checkout(
-    client: BTAPIClient, amount: String, shippingRequired: Bool, currency: String, appLink: String,
+    clientToken: String, amount: String, shippingRequired: Bool, currency: String, appLink: String,
     email: String?,
     resolve: @escaping RCTPromiseResolveBlock,
     reject: @escaping RCTPromiseRejectBlock
   ) {
-    let paypalClient = BTPayPalClient(apiClient: client, universalLink: URL(string: appLink)!)
+    let paypalClient = BTPayPalClient(authorization: clientToken, universalLink: URL(string: appLink)!)
     let checkoutRequest = BTPayPalCheckoutRequest(
       amount: amount, intent: .authorize, userAction: .none, offerPayLater: false,
       currencyCode: currency, requestBillingAgreement: false, shippingCallbackURL: nil,
-      userAuthenticationEmail: email)
-    checkoutRequest.isShippingAddressRequired = shippingRequired
-    checkoutRequest.isShippingAddressEditable = shippingRequired
+      userAuthenticationEmail: email, isShippingAddressRequired: shippingRequired, isShippingAddressEditable: shippingRequired)
 
     paypalClient.tokenize(checkoutRequest) { accountNonce, error in
       if let error = error {
@@ -93,12 +91,8 @@ class BraintreePaypal: NSObject {
         return
       }
 
-      let braintreeClient = BTAPIClient(authorization: clientToken)
-      guard let client = braintreeClient else {
-        return resolve(false)
-      }
       checkout(
-        client: client, amount: amount, shippingRequired: shippingRequired, currency: currency,
+        clientToken: clientToken, amount: amount, shippingRequired: shippingRequired, currency: currency,
         appLink: appLink, email: email, resolve: resolve, reject: reject)
     }
     task.resume()
