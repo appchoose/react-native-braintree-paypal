@@ -56,21 +56,21 @@
     "registry": "https://npm.pkg.github.com"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.0",
-    "@commitlint/cli": "19.8.1",
-    "@commitlint/config-conventional": "19.8.1",
-    "@react-native-community/cli": "20.0.1",
-    "@react-native/babel-preset": "0.81.0",
+    "@biomejs/biome": "2.3.4",
+    "@commitlint/cli": "20.1.0",
+    "@commitlint/config-conventional": "20.0.0",
+    "@react-native-community/cli": "20.0.2",
+    "@react-native/babel-preset": "0.82.1",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
     "@types/react": "19.1.10",
-    "del-cli": "6.0.0",
+    "del-cli": "7.0.0",
     "react": "19.1.1",
-    "react-native": "0.81.0",
-    "react-native-builder-bob": "0.40.13",
-    "semantic-release": "24.2.7",
-    "turbo": "2.5.6",
-    "typescript": "5.9.2"
+    "react-native": "0.82.1",
+    "react-native-builder-bob": "0.40.14",
+    "semantic-release": "25.0.2",
+    "turbo": "2.6.0",
+    "typescript": "5.9.3"
   },
   "peerDependencies": {
     "react": "*",
