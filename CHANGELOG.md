@@ -1,5 +1,17 @@
 # Changelog
 
+# [0.6.0](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.5.0...v0.6.0) (2025-11-10)
+
+
+### Bug Fixes
+
+* node 24 ([bbb971e](https://github.com/appchoose/react-native-braintree-paypal/commit/bbb971e4805fb0691941ddde5b3c363c64431bfa))
+
+
+### Features
+
+* bump to latest braintree sdk ([3fcf031](https://github.com/appchoose/react-native-braintree-paypal/commit/3fcf031ac1331f721f95874c3f1666f3027b0012))
+
 # [0.5.0](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.4.1...v0.5.0) (2025-10-10)
 
 
