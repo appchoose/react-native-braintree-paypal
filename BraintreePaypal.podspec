@@ -16,9 +16,9 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm,cpp,swift}"
   s.private_header_files = "ios/**/*.h"
 
-  s.dependency 'Braintree', '7.0.0'
-  s.dependency 'Braintree/DataCollector', '7.0.0'
-  s.dependency 'Braintree/LocalPayment', '7.0.0'
+  s.dependency 'Braintree', '7.1.0'
+  s.dependency 'Braintree/DataCollector', '7.1.0'
+  s.dependency 'Braintree/LocalPayment', '7.1.0'
 
  install_modules_dependencies(s)
 end
