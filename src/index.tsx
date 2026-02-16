@@ -12,6 +12,9 @@ export async function showPayPal(
   android?: {
     deepLinkFallbackUrlScheme?: string;
   },
+  ios?: {
+    fallbackURLScheme?: string;
+  },
 ): Promise<BraintreePayPalResponse> {
   if (Platform.OS === "android") {
     if (!android) {
@@ -34,6 +37,7 @@ export async function showPayPal(
     currency,
     appLink,
     email,
+    ios?.fallbackURLScheme,
   );
 }
 export * from "./types";

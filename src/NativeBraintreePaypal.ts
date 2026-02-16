@@ -10,7 +10,7 @@ export interface Spec extends TurboModule {
     currency: string,
     appLink: string,
     email?: string,
-    androidDeepLinkFallbackUrlScheme?: string,
+    fallbackURLScheme?: string,
   ): Promise<BraintreePayPalResponse>;
 }
 

@@ -12,14 +12,17 @@ class BraintreePaypal: NSObject {
 
   private func checkout(
     clientToken: String, amount: String, shippingRequired: Bool, currency: String, appLink: String,
-    email: String?,
+    fallbackURLScheme: String?, email: String?,
     resolve: @escaping RCTPromiseResolveBlock,
     reject: @escaping RCTPromiseRejectBlock
   ) {
-    let paypalClient = BTPayPalClient(authorization: clientToken, universalLink: URL(string: appLink)!)
+    let paypalClient = BTPayPalClient(
+      authorization: clientToken, universalLink: URL(string: appLink)!,
+      fallbackURLScheme: fallbackURLScheme)
     let checkoutRequest = BTPayPalCheckoutRequest(
       amount: amount, intent: .authorize, userAction: .none, offerPayLater: false,
-      currencyCode: currency,isShippingAddressEditable: shippingRequired, isShippingAddressRequired: shippingRequired,
+      currencyCode: currency, isShippingAddressEditable: shippingRequired,
+      isShippingAddressRequired: shippingRequired,
       requestBillingAgreement: false, shippingCallbackURL: nil,
       userAuthenticationEmail: email)
 
@@ -71,7 +74,7 @@ class BraintreePaypal: NSObject {
   @objc
   func showPayPal(
     _ serverUrl: String, amount: String, shippingRequired: Bool, currency: String, appLink: String,
-    email: String?,
+    fallbackURLScheme: String?, email: String?,
     resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock
   ) {
     guard let clientTokenURL = URL(string: serverUrl) else {
@@ -94,8 +97,10 @@ class BraintreePaypal: NSObject {
       }
 
       checkout(
-        clientToken: clientToken, amount: amount, shippingRequired: shippingRequired, currency: currency,
-        appLink: appLink, email: email, resolve: resolve, reject: reject)
+        clientToken: clientToken, amount: amount, shippingRequired: shippingRequired,
+        currency: currency,
+        appLink: appLink, fallbackURLScheme: fallbackURLScheme, email: email, resolve: resolve,
+        reject: reject)
     }
     task.resume()
   }
