@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.5](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.6.4...v0.6.5) (2026-07-02)
+
+
+### Bug Fixes
+
+* iOS 16 min ([27bee6d](https://github.com/appchoose/react-native-braintree-paypal/commit/27bee6d69623b4548039589aeba33e6653e1e516))
+
 ## [0.6.4](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.6.3...v0.6.4) (2026-07-02)
 
 
