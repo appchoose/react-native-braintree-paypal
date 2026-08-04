@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.7](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.6.6...v0.6.7) (2026-08-04)
+
+
+### Bug Fixes
+
+* bump android sdk ([c961eb1](https://github.com/appchoose/react-native-braintree-paypal/commit/c961eb140ecfd80beea10336c332631c77359dd1))
+
 ## [0.6.6](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.6.5...v0.6.6) (2026-07-28)
 
 
