@@ -7,9 +7,9 @@ RCT_EXTERN_METHOD(showPayPal
                   : (NSString *)amount shippingRequired
                   : (BOOL)shippingRequired currency
                   : (NSString *)currency appLink
-                  : (NSString *)appLink fallbackURLScheme
-                  : (NSString *)fallbackURLScheme email
-                  : (NSString *)email resolve
+                  : (NSString *)appLink email
+                  : (NSString *)email fallbackURLScheme
+                  : (NSString *)fallbackURLScheme resolve
                   : (RCTPromiseResolveBlock)resolve reject
                   : (RCTPromiseRejectBlock)reject)
 
