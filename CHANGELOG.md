@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.10](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.6.9...v0.6.10) (2026-10-08)
+
+
+### Bug Fixes
+
+* harden native PayPal flow handling ([#10](https://github.com/appchoose/react-native-braintree-paypal/issues/10)) ([03d0cbe](https://github.com/appchoose/react-native-braintree-paypal/commit/03d0cbe6a488eb6e09fe888e5e5a02df0e6031be))
+
 ## [0.6.9](https://github.com/appchoose/react-native-braintree-paypal/compare/v0.6.8...v0.6.9) (2026-09-28)
 
 
